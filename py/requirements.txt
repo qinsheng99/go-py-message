@@ -1,0 +1,10 @@
+numpy~=1.23.4
+esdk-obs-python
+Pillow==9.0.0
+torch
+tqdm==4.64.0
+torchvision==0.13.1
+typing
+argparse~=1.4.0
+scipy~=1.9.3
+requests~=2.28.1
