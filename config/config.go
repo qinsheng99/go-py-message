@@ -11,7 +11,8 @@ import (
 var reIpPort = regexp.MustCompile(`^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}:[1-9][0-9]*$`)
 
 type Configuration struct {
-	MQ MQ `json:"mq"         required:"true"`
+	MaxRetry int `json:"max_retry"`
+	MQ       MQ  `json:"mq"         required:"true"`
 }
 
 func (cfg *Configuration) GetMQConfig() mq.MQConfig {
