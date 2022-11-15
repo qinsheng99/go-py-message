@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -25,8 +24,8 @@ func (cfg *Configuration) GetMQConfig() mq.MQConfig {
 }
 
 func (cfg *Configuration) Validate() error {
-	if len(cfg.ImageAnswerPath) == 0 || len(cfg.TextAnswerPath) == 0 {
-		return fmt.Errorf("answer_path is not empty")
+	if _, err := utils.BuildRequestBody(cfg, ""); err != nil {
+		return err
 	}
 
 	return nil
@@ -34,7 +33,7 @@ func (cfg *Configuration) Validate() error {
 
 func (cfg *Configuration) SetDefault() {
 	if cfg.MaxRetry <= 0 {
-		cfg.MaxRetry = 3
+		cfg.MaxRetry = 10
 	}
 }
 
