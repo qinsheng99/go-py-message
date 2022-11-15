@@ -1,21 +1,27 @@
 package message
 
-// Evaluate PredPath 用户上传的result.txt
+// GameFields PredPath 用户上传的result.txt
 // TruePath 标准答案的result.txt
 // cls 比赛的类别数
 // pos 类别索引标签的起始位
-type Evaluate struct {
-	PredPath string `json:"y_pred_path"`
-	TruePath string `json:"y_true_path"`
-	UserName string `json:"user_name"`
-	Cls, Pos int
+// Calculate UserResult 存有1000张图片的zip文件
+type GameFields struct {
+	UserResult string `json:"user_result"`
+	PredPath   string `json:"y_pred_path"`
+	TruePath   string `json:"y_true_path"`
+	Cls, Pos   int
 }
 
-// Calculate UserResult 存有1000张图片的zip文件
-// UserName 用户名
-type Calculate struct {
-	UserResult string `json:"user_result"`
-	UserName   string `json:"user_name"`
+// GameType
+// 文本分类 text  图像分类 image  风格迁移style
+type GameType struct {
+	Type   string `json:"type"`
+	UserId int    `json:"user_id"`
+}
+
+type Game struct {
+	GameType
+	GameFields
 }
 
 type ScoreRes struct {
@@ -34,10 +40,7 @@ type metrics struct {
 	Err  float64 `json:"err,omitempty"`
 }
 
-type CalculateImpl interface {
-	Calculate(Calculate, *ScoreRes) error
-}
-
-type EvaluateImpl interface {
-	Evaluate(Evaluate, *ScoreRes) error
+type GameImpl interface {
+	Calculate(*GameFields, *ScoreRes) error
+	Evaluate(*GameFields, *ScoreRes) error
 }

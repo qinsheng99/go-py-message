@@ -14,7 +14,7 @@ type scoreService struct {
 }
 
 type CalculateService interface {
-	Calculate(message.Calculate, *message.ScoreRes) error
+	Calculate(*message.GameFields, *message.ScoreRes) error
 }
 
 func NewCalculateService(c score.CalculateScore) CalculateService {
@@ -24,7 +24,7 @@ func NewCalculateService(c score.CalculateScore) CalculateService {
 }
 
 type EvaluateService interface {
-	Evaluate(message.Evaluate, *message.ScoreRes) error
+	Evaluate(*message.GameFields, *message.ScoreRes) error
 }
 
 func NewEvaluateService(e score.EvaluateScore) EvaluateService {
@@ -33,7 +33,7 @@ func NewEvaluateService(e score.EvaluateScore) EvaluateService {
 	}
 }
 
-func (s *scoreService) Evaluate(col message.Evaluate, res *message.ScoreRes) error {
+func (s *scoreService) Evaluate(col *message.GameFields, res *message.ScoreRes) error {
 	bys, err := s.e.Evaluate(col)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (s *scoreService) Evaluate(col message.Evaluate, res *message.ScoreRes) err
 	return json.NewDecoder(bytes.NewBuffer(bys)).Decode(res)
 }
 
-func (s *scoreService) Calculate(col message.Calculate, res *message.ScoreRes) error {
+func (s *scoreService) Calculate(col *message.GameFields, res *message.ScoreRes) error {
 	bys, err := s.c.Calculate(col)
 	if err != nil {
 		return err

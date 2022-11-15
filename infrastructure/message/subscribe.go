@@ -10,6 +10,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	Image = "image"
+	Text  = "text"
+	Style = "style"
+)
+
 func Subscribe(ctx context.Context, handler interface{}, log *logrus.Entry) error {
 	subscribers := make(map[string]mq.Subscriber)
 
@@ -21,15 +27,7 @@ func Subscribe(ctx context.Context, handler interface{}, log *logrus.Entry) erro
 		}
 	}()
 
-	s, err := registerHandlerForEvaluate(handler)
-	if err != nil {
-		return err
-	}
-	if s != nil {
-		subscribers[s.Topic()] = s
-	}
-
-	s, err = registerHandlerForCalculate(handler)
+	s, err := registerHandlerForGame(handler)
 	if err != nil {
 		return err
 	}
@@ -47,62 +45,52 @@ func Subscribe(ctx context.Context, handler interface{}, log *logrus.Entry) erro
 	return nil
 }
 
-func registerHandlerForEvaluate(handler interface{}) (mq.Subscriber, error) {
-	h, ok := handler.(EvaluateImpl)
+func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
+	h, ok := handler.(GameImpl)
 	if !ok {
 		return nil, nil
 	}
 
-	return kafka.Subscribe(topics.Evaluate, func(e mq.Event) (err error) {
+	return kafka.Subscribe(topics.Game, func(e mq.Event) (err error) {
 		msg := e.Message()
 		if msg == nil {
 			return
 		}
 
-		body := Evaluate{}
+		body := Game{}
 		if err = json.Unmarshal(msg.Body, &body); err != nil {
 			return
 		}
 
-		var res ScoreRes
-
-		err = h.Evaluate(body, &res)
-		if err != nil {
-			return err
+		switch body.Type {
+		case Text, Image:
+			go evaluate(h, &body)
+		case Style:
+			go calculate(h, &body)
+		default:
+			return fmt.Errorf("unknown type: %s", body.Type)
 		}
-
-		fmt.Println(res)
 
 		return nil
 	})
 }
 
-func registerHandlerForCalculate(handler interface{}) (mq.Subscriber, error) {
-	h, ok := handler.(CalculateImpl)
-	if !ok {
-		return nil, nil
+func evaluate(h GameImpl, body *Game) {
+	var res ScoreRes
+	err := h.Evaluate(&body.GameFields, &res)
+	if err != nil {
+		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
 	}
 
-	return kafka.Subscribe(topics.Calculate, func(e mq.Event) (err error) {
-		msg := e.Message()
-		if msg == nil {
-			return
-		}
+	logrus.Infof("game type:%s,user:%v,res:%v", body.Type, body.UserId, res)
+}
 
-		body := Calculate{}
-		if err = json.Unmarshal(msg.Body, &body); err != nil {
-			return
-		}
+func calculate(h GameImpl, body *Game) {
+	var res ScoreRes
+	err := h.Calculate(&body.GameFields, &res)
+	if err != nil {
+		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
+	}
 
-		var res ScoreRes
-
-		err = h.Calculate(body, &res)
-		if err != nil {
-			return err
-		}
-
-		fmt.Println(res)
-
-		return nil
-	})
+	logrus.Infof("game type:%s,user:%v,res:%v", body.Type, body.UserId, res)
 }

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -11,13 +12,28 @@ import (
 var reIpPort = regexp.MustCompile(`^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}:[1-9][0-9]*$`)
 
 type Configuration struct {
-	MaxRetry int `json:"max_retry"`
-	MQ       MQ  `json:"mq"         required:"true"`
+	MaxRetry   int    `json:"max_retry"   required:"true"`
+	AnswerPath string `json:"answer_path" required:"true"`
+	MQ         MQ     `json:"mq"          required:"true"`
 }
 
 func (cfg *Configuration) GetMQConfig() mq.MQConfig {
 	return mq.MQConfig{
 		Addresses: cfg.MQ.ParseAddress(),
+	}
+}
+
+func (cfg *Configuration) Validate() error {
+	if len(cfg.AnswerPath) == 0 {
+		return fmt.Errorf("answer_path is not empty")
+	}
+
+	return nil
+}
+
+func (cfg *Configuration) SetDefault() {
+	if cfg.MaxRetry <= 0 {
+		cfg.MaxRetry = 3
 	}
 }
 
@@ -39,8 +55,7 @@ type MQ struct {
 }
 
 type Topics struct {
-	Calculate string `json:"calculate"        required:"true"`
-	Evaluate  string `json:"evaluate"         required:"true"`
+	Game string `json:"game"         required:"true"`
 }
 
 func LoadConfig(path string, cfg interface{}) error {

@@ -2,10 +2,12 @@ package score
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/qinsheng99/go-py-message/domain/score"
 	"github.com/qinsheng99/go-py-message/infrastructure/message"
@@ -31,7 +33,7 @@ func NewEvaluateScore(evaluate string) score.EvaluateScore {
 	}
 }
 
-func (s *evaluateImpl) Evaluate(col message.Evaluate) (data []byte, err error) {
+func (s *evaluateImpl) Evaluate(col *message.GameFields) (data []byte, err error) {
 	args := []string{s.evaluate, "--pred_path", col.PredPath, "--true_path", col.TruePath, "--cls", strconv.Itoa(col.Cls), "--pos", strconv.Itoa(col.Pos)}
 	data, err = exec.Command("python3", args...).Output()
 
@@ -42,8 +44,11 @@ func (s *evaluateImpl) Evaluate(col message.Evaluate) (data []byte, err error) {
 	return
 }
 
-func (s *calculateImpl) Calculate(col message.Calculate) (data []byte, err error) {
-	path := filepath.Join(os.Getenv("UPLOAD"), col.UserName)
+func (s *calculateImpl) Calculate(col *message.GameFields) (data []byte, err error) {
+	if len(col.UserResult) == 0 {
+		return nil, fmt.Errorf("userresult is empty")
+	}
+	path := filepath.Join(os.Getenv("UPLOAD"), fmt.Sprintf("%d", time.Now().UnixMicro()))
 	defer os.RemoveAll(path)
 	args := []string{s.calculate, "--user_result", col.UserResult, "--unzip_path", path}
 	data, err = exec.Command("python3", args...).Output()
