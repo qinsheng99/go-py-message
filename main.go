@@ -71,11 +71,12 @@ func main() {
 }
 func newHandler(cfg *config.Configuration, log *logrus.Entry) *handler {
 	return &handler{
-		maxRetry:   cfg.MaxRetry,
-		log:        log,
-		calculate:  app.NewCalculateService(score.NewCalculateScore(os.Getenv("CALCULATE"))),
-		evaluate:   app.NewEvaluateService(score.NewEvaluateScore(os.Getenv("EVALUATE"))),
-		answerPath: cfg.AnswerPath,
+		maxRetry:        cfg.MaxRetry,
+		log:             log,
+		calculate:       app.NewCalculateService(score.NewCalculateScore(os.Getenv("CALCULATE"))),
+		evaluate:        app.NewEvaluateService(score.NewEvaluateScore(os.Getenv("EVALUATE"))),
+		imageAnswerPath: cfg.ImageAnswerPath,
+		textAnswerPath:  cfg.TextAnswerPath,
 	}
 }
 
@@ -109,6 +110,7 @@ func run(h *handler, log *logrus.Entry) {
 			log.Info("receive exit signal")
 			done()
 			called = true
+			os.Exit(1)
 			return
 		}
 	}(ctx)

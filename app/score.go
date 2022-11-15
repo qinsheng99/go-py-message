@@ -24,7 +24,7 @@ func NewCalculateService(c score.CalculateScore) CalculateService {
 }
 
 type EvaluateService interface {
-	Evaluate(*message.GameFields, *message.ScoreRes) error
+	Evaluate(*message.GameFields, *message.ScoreRes, string) error
 }
 
 func NewEvaluateService(e score.EvaluateScore) EvaluateService {
@@ -33,8 +33,8 @@ func NewEvaluateService(e score.EvaluateScore) EvaluateService {
 	}
 }
 
-func (s *scoreService) Evaluate(col *message.GameFields, res *message.ScoreRes) error {
-	bys, err := s.e.Evaluate(col)
+func (s *scoreService) Evaluate(col *message.GameFields, res *message.ScoreRes, answerPath string) error {
+	bys, err := s.e.Evaluate(col, answerPath)
 	if err != nil {
 		return err
 	}

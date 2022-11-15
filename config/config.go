@@ -12,9 +12,10 @@ import (
 var reIpPort = regexp.MustCompile(`^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}:[1-9][0-9]*$`)
 
 type Configuration struct {
-	MaxRetry   int    `json:"max_retry"   required:"true"`
-	AnswerPath string `json:"answer_path" required:"true"`
-	MQ         MQ     `json:"mq"          required:"true"`
+	MaxRetry        int    `json:"max_retry"   required:"true"`
+	ImageAnswerPath string `json:"image_answer_path" required:"true"`
+	TextAnswerPath  string `json:"text_answer_path" required:"true"`
+	MQ              MQ     `json:"mq"          required:"true"`
 }
 
 func (cfg *Configuration) GetMQConfig() mq.MQConfig {
@@ -24,7 +25,7 @@ func (cfg *Configuration) GetMQConfig() mq.MQConfig {
 }
 
 func (cfg *Configuration) Validate() error {
-	if len(cfg.AnswerPath) == 0 {
+	if len(cfg.ImageAnswerPath) == 0 || len(cfg.TextAnswerPath) == 0 {
 		return fmt.Errorf("answer_path is not empty")
 	}
 

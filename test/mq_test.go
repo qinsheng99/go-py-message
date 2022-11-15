@@ -24,9 +24,9 @@ func TestMqGame(t *testing.T) {
 		GameType: message.GameType{Type: "text", UserId: 1},
 		GameFields: message.GameFields{
 			PredPath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
-			TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
-			Cls:      256,
-			Pos:      1,
+			//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
+			Cls: 256,
+			Pos: 1,
 		},
 	}
 
@@ -34,9 +34,9 @@ func TestMqGame(t *testing.T) {
 		GameType: message.GameType{Type: "image", UserId: 2},
 		GameFields: message.GameFields{
 			PredPath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
-			TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
-			Cls:      256,
-			Pos:      1,
+			//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
+			Cls: 256,
+			Pos: 1,
 		},
 	}
 

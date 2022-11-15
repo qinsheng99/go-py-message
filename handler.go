@@ -9,11 +9,12 @@ import (
 )
 
 type handler struct {
-	log        *logrus.Entry
-	maxRetry   int
-	evaluate   app.EvaluateService
-	calculate  app.CalculateService
-	answerPath string
+	log             *logrus.Entry
+	maxRetry        int
+	evaluate        app.EvaluateService
+	calculate       app.CalculateService
+	textAnswerPath  string
+	imageAnswerPath string
 }
 
 const sleepTime = 100 * time.Millisecond
@@ -30,10 +31,17 @@ func (h *handler) Calculate(cal *message.GameFields, res *message.ScoreRes) erro
 	})
 }
 
-func (h *handler) Evaluate(cal *message.GameFields, res *message.ScoreRes) error {
-	cal.TruePath = h.answerPath
+func (h *handler) Evaluate(cal *message.GameFields, res *message.ScoreRes, typ string) error {
+	var path string
+	switch typ {
+	case message.Image:
+		path = h.imageAnswerPath
+	case message.Text:
+		path = h.textAnswerPath
+
+	}
 	return h.do(func(b bool) error {
-		err := h.evaluate.Evaluate(cal, res)
+		err := h.evaluate.Evaluate(cal, res, path)
 		if err != nil {
 			h.log.Error(err)
 			return err

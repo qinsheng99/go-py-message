@@ -33,8 +33,8 @@ func NewEvaluateScore(evaluate string) score.EvaluateScore {
 	}
 }
 
-func (s *evaluateImpl) Evaluate(col *message.GameFields) (data []byte, err error) {
-	args := []string{s.evaluate, "--pred_path", col.PredPath, "--true_path", col.TruePath, "--cls", strconv.Itoa(col.Cls), "--pos", strconv.Itoa(col.Pos)}
+func (s *evaluateImpl) Evaluate(col *message.GameFields, answerPath string) (data []byte, err error) {
+	args := []string{s.evaluate, "--pred_path", col.PredPath, "--true_path", answerPath, "--cls", strconv.Itoa(col.Cls), "--pos", strconv.Itoa(col.Pos)}
 	data, err = exec.Command("python3", args...).Output()
 
 	if err != nil {

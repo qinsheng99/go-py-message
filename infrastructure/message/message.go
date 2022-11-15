@@ -1,22 +1,21 @@
 package message
 
 // GameFields PredPath 用户上传的result.txt
-// TruePath 标准答案的result.txt
-// cls 比赛的类别数
-// pos 类别索引标签的起始位
-// Calculate UserResult 存有1000张图片的zip文件
+// Cls 比赛的类别数
+// Pos 类别索引标签的起始位
+// UserResult  存有1000张图片的zip文件
 type GameFields struct {
 	UserResult string `json:"user_result"`
-	PredPath   string `json:"y_pred_path"`
-	TruePath   string `json:"y_true_path"`
+	PredPath   string `json:"pred_path"`
 	Cls, Pos   int
 }
 
 // GameType
 // 文本分类 text  图像分类 image  风格迁移style
 type GameType struct {
-	Type   string `json:"type"`
-	UserId int    `json:"user_id"`
+	Type      string `json:"type"`
+	UserId    int    `json:"user_id"`
+	GameState int    `json:"game_state"`
 }
 
 type Game struct {
@@ -42,5 +41,5 @@ type metrics struct {
 
 type GameImpl interface {
 	Calculate(*GameFields, *ScoreRes) error
-	Evaluate(*GameFields, *ScoreRes) error
+	Evaluate(*GameFields, *ScoreRes, string) error
 }

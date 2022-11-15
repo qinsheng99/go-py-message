@@ -39,6 +39,7 @@ func Subscribe(ctx context.Context, handler interface{}, log *logrus.Entry) erro
 	if len(subscribers) == 0 {
 		return nil
 	}
+	log.Info("listen mq")
 
 	<-ctx.Done()
 
@@ -77,9 +78,10 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 
 func evaluate(h GameImpl, body *Game) {
 	var res ScoreRes
-	err := h.Evaluate(&body.GameFields, &res)
+	err := h.Evaluate(&body.GameFields, &res, body.Type)
 	if err != nil {
 		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
+		return
 	}
 
 	logrus.Infof("game type:%s,user:%v,res:%v", body.Type, body.UserId, res)
@@ -90,6 +92,7 @@ func calculate(h GameImpl, body *Game) {
 	err := h.Calculate(&body.GameFields, &res)
 	if err != nil {
 		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
+		return
 	}
 
 	logrus.Infof("game type:%s,user:%v,res:%v", body.Type, body.UserId, res)

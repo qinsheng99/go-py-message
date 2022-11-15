@@ -9,5 +9,5 @@ type CalculateScore interface {
 }
 
 type EvaluateScore interface {
-	Evaluate(*message.GameFields) ([]byte, error)
+	Evaluate(*message.GameFields, string) ([]byte, error)
 }
