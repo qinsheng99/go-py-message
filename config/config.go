@@ -18,8 +18,8 @@ type Configuration struct {
 }
 
 type Match struct {
-	Id         int    `json:"id" required:"true"`
-	Type       string `json:"type" required:"true"`
+	Id         int    `json:"match_id" required:"true"`
+	Type       string `json:"match_type" required:"true"`
 	AnswerPath string `json:"answer_path"`
 	Pos        int    `json:"pos"`
 	Cls        int    `json:"cls"`
