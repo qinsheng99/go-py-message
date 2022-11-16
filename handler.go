@@ -17,23 +17,38 @@ type handler struct {
 	imageAnswerPath string
 }
 
+type handlerMessage struct {
+	message.GameType
+	score float64
+	msg   string
+}
+
 const sleepTime = 100 * time.Millisecond
 
-func (h *handler) Calculate(cal *message.Game, res *message.ScoreRes) error {
+func (h *handler) Calculate(cal *message.Game) error {
 	return h.do(func(b bool) error {
-		err := h.calculate.Calculate(&cal.GameFields, res)
+		var res message.ScoreRes
+		err := h.calculate.Calculate(&cal.GameFields, &res)
+		var m handlerMessage
+		m.GameType = cal.GameType
 		if err != nil {
-			h.log.Error(err)
-			return err
+			h.log.Errorf("calculate script failed,err: %v", err)
+			m.msg = err.Error()
+		} else {
+			if res.Status != 200 {
+				m.msg = res.Msg
+			} else {
+				m.score = res.Data
+			}
 		}
-
-		return nil
+		h.handlerCalculate(m)
+		return err
 	})
 }
 
-func (h *handler) Evaluate(eval *message.Game, res *message.ScoreRes, typ string) error {
+func (h *handler) Evaluate(eval *message.Game) error {
 	var path string
-	switch typ {
+	switch eval.Type {
 	case message.Image:
 		path = h.imageAnswerPath
 	case message.Text:
@@ -41,14 +56,31 @@ func (h *handler) Evaluate(eval *message.Game, res *message.ScoreRes, typ string
 
 	}
 	return h.do(func(b bool) error {
-		err := h.evaluate.Evaluate(&eval.GameFields, res, path)
+		var res message.ScoreRes
+		err := h.evaluate.Evaluate(&eval.GameFields, &res, path)
+		var m handlerMessage
+		m.GameType = eval.GameType
 		if err != nil {
-			h.log.Error(err)
-			return err
+			h.log.Errorf("evaluate script failed,err: %v", err)
+			m.msg = err.Error()
+		} else {
+			if res.Status != 200 {
+				m.msg = res.Msg
+			} else {
+				m.score = res.Metrics.Acc
+			}
 		}
-
-		return nil
+		h.handlerEvaluate(m)
+		return err
 	})
+}
+
+func (h *handler) handlerCalculate(m handlerMessage) {
+	h.log.Infof("call calculate rpc game type:%s,user:%v,res:(%s/%v)", m.Type, m.UserId, m.msg, m.score)
+}
+
+func (h *handler) handlerEvaluate(m handlerMessage) {
+	h.log.Infof("call calculate rpc game type:%s,user:%v,res:(%s/%v)", m.Type, m.UserId, m.msg, m.score)
 }
 
 func (h *handler) do(f func(bool) error) (err error) {

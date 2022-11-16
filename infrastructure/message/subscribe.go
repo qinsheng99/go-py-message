@@ -77,23 +77,15 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 }
 
 func evaluate(h GameImpl, body *Game) {
-	var res ScoreRes
-	err := h.Evaluate(body, &res, body.Type)
+	err := h.Evaluate(body)
 	if err != nil {
 		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
-		return
 	}
-
-	logrus.Infof("game type:%s,user:%v,res:%v", body.Type, body.UserId, res)
 }
 
 func calculate(h GameImpl, body *Game) {
-	var res ScoreRes
-	err := h.Calculate(body, &res)
+	err := h.Calculate(body)
 	if err != nil {
 		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
-		return
 	}
-
-	logrus.Infof("game type:%s,user:%v,res:%v", body.Type, body.UserId, res)
 }

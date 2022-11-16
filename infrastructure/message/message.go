@@ -15,7 +15,7 @@ type GameFields struct {
 type GameType struct {
 	Type      string `json:"type"`
 	UserId    int    `json:"user_id"`
-	GameState int    `json:"game_state"`
+	GameStage int    `json:"game_stage"`
 }
 
 type Game struct {
@@ -40,6 +40,6 @@ type metrics struct {
 }
 
 type GameImpl interface {
-	Calculate(*Game, *ScoreRes) error
-	Evaluate(*Game, *ScoreRes, string) error
+	Calculate(*Game) error
+	Evaluate(*Game) error
 }
