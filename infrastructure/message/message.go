@@ -40,6 +40,6 @@ type metrics struct {
 }
 
 type GameImpl interface {
-	Calculate(*GameFields, *ScoreRes) error
-	Evaluate(*GameFields, *ScoreRes, string) error
+	Calculate(*Game, *ScoreRes) error
+	Evaluate(*Game, *ScoreRes, string) error
 }

@@ -78,7 +78,7 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 
 func evaluate(h GameImpl, body *Game) {
 	var res ScoreRes
-	err := h.Evaluate(&body.GameFields, &res, body.Type)
+	err := h.Evaluate(body, &res, body.Type)
 	if err != nil {
 		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
 		return
@@ -89,7 +89,7 @@ func evaluate(h GameImpl, body *Game) {
 
 func calculate(h GameImpl, body *Game) {
 	var res ScoreRes
-	err := h.Calculate(&body.GameFields, &res)
+	err := h.Calculate(body, &res)
 	if err != nil {
 		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
 		return

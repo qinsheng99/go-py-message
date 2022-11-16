@@ -19,9 +19,9 @@ type handler struct {
 
 const sleepTime = 100 * time.Millisecond
 
-func (h *handler) Calculate(cal *message.GameFields, res *message.ScoreRes) error {
+func (h *handler) Calculate(cal *message.Game, res *message.ScoreRes) error {
 	return h.do(func(b bool) error {
-		err := h.calculate.Calculate(cal, res)
+		err := h.calculate.Calculate(&cal.GameFields, res)
 		if err != nil {
 			h.log.Error(err)
 			return err
@@ -31,7 +31,7 @@ func (h *handler) Calculate(cal *message.GameFields, res *message.ScoreRes) erro
 	})
 }
 
-func (h *handler) Evaluate(cal *message.GameFields, res *message.ScoreRes, typ string) error {
+func (h *handler) Evaluate(eval *message.Game, res *message.ScoreRes, typ string) error {
 	var path string
 	switch typ {
 	case message.Image:
@@ -41,7 +41,7 @@ func (h *handler) Evaluate(cal *message.GameFields, res *message.ScoreRes, typ s
 
 	}
 	return h.do(func(b bool) error {
-		err := h.evaluate.Evaluate(cal, res, path)
+		err := h.evaluate.Evaluate(&eval.GameFields, res, path)
 		if err != nil {
 			h.log.Error(err)
 			return err
