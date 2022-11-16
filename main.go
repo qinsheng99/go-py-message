@@ -71,12 +71,11 @@ func main() {
 }
 func newHandler(cfg *config.Configuration, log *logrus.Entry) *handler {
 	return &handler{
-		maxRetry:        cfg.MaxRetry,
-		log:             log,
-		calculate:       app.NewCalculateService(score.NewCalculateScore(os.Getenv("CALCULATE"))),
-		evaluate:        app.NewEvaluateService(score.NewEvaluateScore(os.Getenv("EVALUATE"))),
-		imageAnswerPath: cfg.ImageAnswerPath,
-		textAnswerPath:  cfg.TextAnswerPath,
+		maxRetry:  cfg.MaxRetry,
+		log:       log,
+		calculate: app.NewCalculateService(score.NewCalculateScore(os.Getenv("CALCULATE"))),
+		evaluate:  app.NewEvaluateService(score.NewEvaluateScore(os.Getenv("EVALUATE"))),
+		match:     cfg,
 	}
 }
 

@@ -1,26 +1,27 @@
 package message
 
-// GameFields PredPath 用户上传的result.txt
+import (
+	"github.com/qinsheng99/go-py-message/config"
+)
+
+// GameFields Path 用户上传的result.txt
 // Cls 比赛的类别数
 // Pos 类别索引标签的起始位
 // UserResult  存有1000张图片的zip文件
-type GameFields struct {
-	UserResult string `json:"user_result"`
-	PredPath   string `json:"pred_path"`
-	Cls, Pos   int
-}
 
-// GameType
+// MatchMessage
 // 文本分类 text  图像分类 image  风格迁移style
-type GameType struct {
-	Type      string `json:"type"`
-	UserId    int    `json:"user_id"`
-	GameStage int    `json:"game_stage"`
+type MatchMessage struct {
+	MatchId    int    `json:"match_id"`
+	UserId     int    `json:"user_id"`
+	MatchStage int    `json:"match_stage"`
+	Path       string `json:"path"`
 }
 
-type Game struct {
-	GameType
-	GameFields
+type MatchFields struct {
+	Path       string `json:"path"`
+	AnswerPath string `json:"answer_path"`
+	Cls, Pos   int
 }
 
 type ScoreRes struct {
@@ -39,7 +40,15 @@ type metrics struct {
 	Err  float64 `json:"err,omitempty"`
 }
 
-type GameImpl interface {
-	Calculate(*Game) error
-	Evaluate(*Game) error
+type MatchImpl interface {
+	Calculate(*MatchMessage, *MatchFields) error
+	Evaluate(*MatchMessage, *MatchFields) error
+	GetMatch(id int) *config.Match
+}
+
+type MatchFieldImpl interface {
+	GetAnswerPath() string
+	GetType() string
+	GetPos() int
+	GetCls() int
 }

@@ -4,33 +4,32 @@ import (
 	"time"
 
 	"github.com/qinsheng99/go-py-message/app"
+	"github.com/qinsheng99/go-py-message/config"
 	"github.com/qinsheng99/go-py-message/infrastructure/message"
 	"github.com/sirupsen/logrus"
 )
 
 type handler struct {
-	log             *logrus.Entry
-	maxRetry        int
-	evaluate        app.EvaluateService
-	calculate       app.CalculateService
-	textAnswerPath  string
-	imageAnswerPath string
+	log       *logrus.Entry
+	maxRetry  int
+	evaluate  app.EvaluateService
+	calculate app.CalculateService
+	match     config.MatchImpl
 }
 
 type handlerMessage struct {
-	message.GameType
+	message.MatchMessage
 	score float64
 	msg   string
 }
 
 const sleepTime = 100 * time.Millisecond
 
-func (h *handler) Calculate(cal *message.Game) error {
+func (h *handler) Calculate(cal *message.MatchMessage, match *message.MatchFields) error {
 	return h.do(func(b bool) error {
 		var res message.ScoreRes
-		err := h.calculate.Calculate(&cal.GameFields, &res)
-		var m handlerMessage
-		m.GameType = cal.GameType
+		var m = handlerMessage{MatchMessage: *cal}
+		err := h.calculate.Calculate(match, &res)
 		if err != nil {
 			h.log.Errorf("calculate script failed,err: %v", err)
 			m.msg = err.Error()
@@ -46,20 +45,11 @@ func (h *handler) Calculate(cal *message.Game) error {
 	})
 }
 
-func (h *handler) Evaluate(eval *message.Game) error {
-	var path string
-	switch eval.Type {
-	case message.Image:
-		path = h.imageAnswerPath
-	case message.Text:
-		path = h.textAnswerPath
-
-	}
+func (h *handler) Evaluate(eval *message.MatchMessage, match *message.MatchFields) error {
 	return h.do(func(b bool) error {
 		var res message.ScoreRes
-		err := h.evaluate.Evaluate(&eval.GameFields, &res, path)
-		var m handlerMessage
-		m.GameType = eval.GameType
+		var m = handlerMessage{MatchMessage: *eval}
+		err := h.evaluate.Evaluate(match, &res)
 		if err != nil {
 			h.log.Errorf("evaluate script failed,err: %v", err)
 			m.msg = err.Error()
@@ -75,12 +65,16 @@ func (h *handler) Evaluate(eval *message.Game) error {
 	})
 }
 
+func (h *handler) GetMatch(id int) *config.Match {
+	return h.match.GetMatch(id)
+}
+
 func (h *handler) handlerCalculate(m handlerMessage) {
-	h.log.Infof("call calculate rpc game type:%s,user:%v,res:(%s/%v)", m.Type, m.UserId, m.msg, m.score)
+	h.log.Infof("call calculate rpc game type:%d,user:%v,stage:%v,res:(%s/%v)", m.MatchId, m.UserId, m.MatchStage, m.msg, m.score)
 }
 
 func (h *handler) handlerEvaluate(m handlerMessage) {
-	h.log.Infof("call calculate rpc game type:%s,user:%v,res:(%s/%v)", m.Type, m.UserId, m.msg, m.score)
+	h.log.Infof("call evaluate rpc game type:%d,user:%v,stage:%v,res:(%s/%v)", m.MatchId, m.UserId, m.MatchStage, m.msg, m.score)
 }
 
 func (h *handler) do(f func(bool) error) (err error) {

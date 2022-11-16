@@ -33,8 +33,8 @@ func NewEvaluateScore(evaluate string) score.EvaluateScore {
 	}
 }
 
-func (s *evaluateImpl) Evaluate(col *message.GameFields, answerPath string) (data []byte, err error) {
-	args := []string{s.evaluate, "--pred_path", col.PredPath, "--true_path", answerPath, "--cls", strconv.Itoa(col.Cls), "--pos", strconv.Itoa(col.Pos)}
+func (s *evaluateImpl) Evaluate(col *message.MatchFields) (data []byte, err error) {
+	args := []string{s.evaluate, "--pred_path", col.Path, "--true_path", col.AnswerPath, "--cls", strconv.Itoa(col.Cls), "--pos", strconv.Itoa(col.Pos)}
 	data, err = exec.Command("python3", args...).Output()
 
 	if err != nil {
@@ -44,13 +44,13 @@ func (s *evaluateImpl) Evaluate(col *message.GameFields, answerPath string) (dat
 	return
 }
 
-func (s *calculateImpl) Calculate(col *message.GameFields) (data []byte, err error) {
-	if len(col.UserResult) == 0 {
-		return nil, fmt.Errorf("userresult is empty")
+func (s *calculateImpl) Calculate(col *message.MatchFields) (data []byte, err error) {
+	if len(col.Path) == 0 {
+		return nil, fmt.Errorf("path is empty")
 	}
 	path := filepath.Join(os.Getenv("UPLOAD"), fmt.Sprintf("%d", time.Now().UnixMicro()))
 	defer os.RemoveAll(path)
-	args := []string{s.calculate, "--user_result", col.UserResult, "--unzip_path", path}
+	args := []string{s.calculate, "--user_result", col.Path, "--unzip_path", path}
 	data, err = exec.Command("python3", args...).Output()
 
 	if err != nil {

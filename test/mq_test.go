@@ -20,38 +20,32 @@ func TestMqGame(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data1 := message.Game{
-		GameType: message.GameType{Type: "text", UserId: 1},
-		GameFields: message.GameFields{
-			PredPath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
-			//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
-			Cls: 256,
-			Pos: 1,
-		},
+	data1 := message.MatchMessage{
+		MatchId: 1,
+		UserId:  1,
+		Path:    "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
+		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
 	}
 
-	data2 := message.Game{
-		GameType: message.GameType{Type: "image", UserId: 2},
-		GameFields: message.GameFields{
-			PredPath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
-			//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
-			Cls: 256,
-			Pos: 1,
-		},
+	data2 := message.MatchMessage{
+		MatchId: 2,
+		UserId:  2,
+		Path:    "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
+		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
 	}
 
-	data3 := message.Game{
-		GameType: message.GameType{Type: "style", UserId: 3},
-		GameFields: message.GameFields{
-			UserResult: "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
-		},
+	data3 := message.MatchMessage{
+		MatchId: 3,
+		UserId:  3,
+		Path:    "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
+		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
 	}
 
-	data4 := message.Game{
-		GameType: message.GameType{Type: "dd", UserId: 4},
-		GameFields: message.GameFields{
-			UserResult: "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
-		},
+	data4 := message.MatchMessage{
+		MatchId: 4,
+		UserId:  4,
+		Path:    "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
+		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
 	}
 
 	bys1, err := json.Marshal(data1)

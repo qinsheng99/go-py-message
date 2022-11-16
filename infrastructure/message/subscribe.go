@@ -47,45 +47,50 @@ func Subscribe(ctx context.Context, handler interface{}, log *logrus.Entry) erro
 }
 
 func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
-	h, ok := handler.(GameImpl)
+	h, ok := handler.(MatchImpl)
 	if !ok {
 		return nil, nil
 	}
 
-	return kafka.Subscribe(topics.Game, func(e mq.Event) (err error) {
+	return kafka.Subscribe(topics.Match, func(e mq.Event) (err error) {
 		msg := e.Message()
 		if msg == nil {
 			return
 		}
 
-		body := Game{}
+		body := MatchMessage{}
 		if err = json.Unmarshal(msg.Body, &body); err != nil {
 			return
 		}
 
-		switch body.Type {
+		m := h.GetMatch(body.MatchId)
+		if m == nil {
+			return fmt.Errorf("unknown match type")
+		}
+
+		switch m.GetType() {
 		case Text, Image:
-			go evaluate(h, &body)
+			go evaluate(h, &body, m)
 		case Style:
 			go calculate(h, &body)
-		default:
-			return fmt.Errorf("unknown type: %s", body.Type)
 		}
 
 		return nil
 	})
 }
 
-func evaluate(h GameImpl, body *Game) {
-	err := h.Evaluate(body)
+func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
+	var c = MatchFields{Path: body.Path, Cls: m.GetCls(), Pos: m.GetPos(), AnswerPath: m.GetAnswerPath()}
+	err := h.Evaluate(body, &c)
 	if err != nil {
-		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
+		logrus.Errorf("evaluate failed, game type:%d,user:%v", body.MatchId, body.UserId)
 	}
 }
 
-func calculate(h GameImpl, body *Game) {
-	err := h.Calculate(body)
+func calculate(h MatchImpl, body *MatchMessage) {
+	var c = MatchFields{Path: body.Path}
+	err := h.Calculate(body, &c)
 	if err != nil {
-		logrus.Errorf("evaluate failed, game type:%s,user:%v", body.Type, body.UserId)
+		logrus.Errorf("evaluate failed, game type:%d,user:%v", body.MatchId, body.UserId)
 	}
 }

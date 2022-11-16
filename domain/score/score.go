@@ -5,9 +5,9 @@ import (
 )
 
 type CalculateScore interface {
-	Calculate(*message.GameFields) ([]byte, error)
+	Calculate(*message.MatchFields) ([]byte, error)
 }
 
 type EvaluateScore interface {
-	Evaluate(*message.GameFields, string) ([]byte, error)
+	Evaluate(*message.MatchFields) ([]byte, error)
 }
