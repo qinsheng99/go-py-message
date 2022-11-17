@@ -3,6 +3,8 @@ package main
 import (
 	"time"
 
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/client"
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
 	"github.com/qinsheng99/go-py-message/app"
 	"github.com/qinsheng99/go-py-message/config"
 	"github.com/qinsheng99/go-py-message/infrastructure/message"
@@ -15,12 +17,13 @@ type handler struct {
 	evaluate  app.EvaluateService
 	calculate app.CalculateService
 	match     config.MatchImpl
+	cli       *client.CompetitionClient
 }
 
 type handlerMessage struct {
 	message.MatchMessage
-	score float64
-	msg   string
+	score  float32
+	status string
 }
 
 const sleepTime = 100 * time.Millisecond
@@ -32,15 +35,15 @@ func (h *handler) Calculate(cal *message.MatchMessage, match *message.MatchField
 		err := h.calculate.Calculate(match, &res)
 		if err != nil {
 			h.log.Errorf("calculate script failed,err: %v", err)
-			m.msg = err.Error()
+			m.status = err.Error()
 		} else {
 			if res.Status != 200 {
-				m.msg = res.Msg
+				m.status = res.Msg
 			} else {
 				m.score = res.Data
 			}
 		}
-		h.handlerCalculate(m)
+		h.handlerCompetition(m)
 		return err
 	})
 }
@@ -52,29 +55,37 @@ func (h *handler) Evaluate(eval *message.MatchMessage, match *message.MatchField
 		err := h.evaluate.Evaluate(match, &res)
 		if err != nil {
 			h.log.Errorf("evaluate script failed,err: %v", err)
-			m.msg = err.Error()
+			m.status = err.Error()
 		} else {
 			if res.Status != 200 {
-				m.msg = res.Msg
+				m.status = res.Msg
 			} else {
 				m.score = res.Metrics.Acc
 			}
 		}
-		h.handlerEvaluate(m)
+		h.handlerCompetition(m)
 		return err
 	})
 }
 
-func (h *handler) GetMatch(id int) message.MatchFieldImpl {
+func (h *handler) GetMatch(id string) message.MatchFieldImpl {
 	return h.match.GetMatch(id)
 }
 
-func (h *handler) handlerCalculate(m handlerMessage) {
-	h.log.Infof("call calculate rpc game type:%d,user:%v,stage:%v,res:(%s/%v)", m.MatchId, m.UserId, m.MatchStage, m.msg, m.score)
-}
-
-func (h *handler) handlerEvaluate(m handlerMessage) {
-	h.log.Infof("call evaluate rpc game type:%d,user:%v,stage:%v,res:(%s/%v)", m.MatchId, m.UserId, m.MatchStage, m.msg, m.score)
+func (h *handler) handlerCompetition(m handlerMessage) {
+	err := h.cli.SetSubmissionInfo(&competition.SubmissionIndex{
+		Id:            m.UserId,
+		Phase:         m.Phase,
+		CompetitionId: m.CompetitionId,
+	}, &competition.SubmissionInfo{
+		Status: m.status,
+		Score:  m.score,
+	})
+	if err != nil {
+		h.log.Errorf("call competition rpc failed,err :%v ,data:%v", err, m)
+	} else {
+		h.log.Debugf("call competition rpc, id:%s,user:%v,stage:%v,res:(%s/%v)", m.CompetitionId, m.UserId, m.Phase, m.status, m.score)
+	}
 }
 
 func (h *handler) do(f func(bool) error) (err error) {

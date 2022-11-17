@@ -10,6 +10,7 @@ import (
 
 	"github.com/opensourceways/community-robot-lib/logrusutil"
 	liboptions "github.com/opensourceways/community-robot-lib/options"
+	"github.com/opensourceways/xihe-grpc-protocol/grpc/client"
 	"github.com/qinsheng99/go-py-message/app"
 	"github.com/qinsheng99/go-py-message/config"
 	"github.com/qinsheng99/go-py-message/infrastructure/message"
@@ -70,16 +71,26 @@ func main() {
 	run(newHandler(cfg, log), log)
 }
 func newHandler(cfg *config.Configuration, log *logrus.Entry) *handler {
+	competitionClient, err := client.NewCompetitionClient(cfg.Endpoint)
+	if err != nil {
+		logrus.Errorf("init rpc server err: %v", err)
+		return nil
+	}
 	return &handler{
 		maxRetry:  cfg.MaxRetry,
 		log:       log,
 		calculate: app.NewCalculateService(score.NewCalculateScore(os.Getenv("CALCULATE"))),
 		evaluate:  app.NewEvaluateService(score.NewEvaluateScore(os.Getenv("EVALUATE"))),
 		match:     cfg,
+		cli:       competitionClient,
 	}
 }
 
 func run(h *handler, log *logrus.Entry) {
+	if h == nil {
+		return
+	}
+	defer h.cli.Disconnect()
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
 

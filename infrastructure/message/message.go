@@ -8,10 +8,10 @@ package message
 // MatchMessage
 // 文本分类 text  图像分类 image  风格迁移style
 type MatchMessage struct {
-	MatchId    int    `json:"match_id"`
-	UserId     int    `json:"user_id"`
-	MatchStage int    `json:"match_stage"`
-	Path       string `json:"path"`
+	CompetitionId string `json:"competition_id"`
+	UserId        string `json:"id"`
+	Phase         string `json:"phase"`
+	Path          string `json:"path,omitempty"`
 }
 
 type MatchFields struct {
@@ -23,23 +23,23 @@ type MatchFields struct {
 type ScoreRes struct {
 	Status  int     `json:"status"`
 	Msg     string  `json:"msg"`
-	Data    float64 `json:"data,omitempty"`
+	Data    float32 `json:"data,om64itempty"`
 	Metrics metrics `json:"metrics,omitempty"`
 }
 type metrics struct {
-	Ap   float64 `json:"ap,omitempty"`
-	Ar   float64 `json:"ar,omitempty"`
-	Af1  float64 `json:"af1,omitempty"`
-	Af05 float64 `json:"af05,omitempty"`
-	Af2  float64 `json:"af2,omitempty"`
-	Acc  float64 `json:"acc,omitempty"`
-	Err  float64 `json:"err,omitempty"`
+	Ap   float32 `json:"ap,omitempty"`
+	Ar   float32 `json:"ar,omitempty"`
+	Af1  float32 `json:"af1,omitempty"`
+	Af05 float32 `json:"af05,omitempty"`
+	Af2  float32 `json:"af2,omitempty"`
+	Acc  float32 `json:"acc,omitempty"`
+	Err  float32 `json:"err,omitempty"`
 }
 
 type MatchImpl interface {
 	Calculate(*MatchMessage, *MatchFields) error
 	Evaluate(*MatchMessage, *MatchFields) error
-	GetMatch(id int) MatchFieldImpl
+	GetMatch(id string) MatchFieldImpl
 }
 
 type MatchFieldImpl interface {

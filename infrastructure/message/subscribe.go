@@ -63,9 +63,9 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 			return
 		}
 
-		m := h.GetMatch(body.MatchId)
+		m := h.GetMatch(body.CompetitionId)
 		if m == nil {
-			return fmt.Errorf("unknown match type")
+			return fmt.Errorf("unknown competition id:%s", body.CompetitionId)
 		}
 
 		switch m.GetType() {
@@ -83,7 +83,7 @@ func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 	var c = MatchFields{Path: body.Path, Cls: m.GetCls(), Pos: m.GetPos(), AnswerPath: m.GetAnswerPath()}
 	err := h.Evaluate(body, &c)
 	if err != nil {
-		logrus.Errorf("evaluate failed, game type:%d,user:%v", body.MatchId, body.UserId)
+		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)
 	}
 }
 
@@ -91,6 +91,6 @@ func calculate(h MatchImpl, body *MatchMessage) {
 	var c = MatchFields{Path: body.Path}
 	err := h.Calculate(body, &c)
 	if err != nil {
-		logrus.Errorf("evaluate failed, game type:%d,user:%v", body.MatchId, body.UserId)
+		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)
 	}
 }

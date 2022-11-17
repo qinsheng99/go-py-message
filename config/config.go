@@ -18,8 +18,8 @@ type Configuration struct {
 }
 
 type match struct {
-	Id         int    `json:"match_id" required:"true"`
-	Type       string `json:"match_type" required:"true"`
+	Id         string `json:"competition_id" required:"true"`
+	Type       string `json:"competition_type" required:"true"`
 	AnswerPath string `json:"answer_path"`
 	Pos        int    `json:"pos"`
 	Cls        int    `json:"cls"`
@@ -41,10 +41,10 @@ func (m *match) GetCls() int {
 	return m.Cls
 }
 
-func (cfg *Configuration) GetMatch(id int) MatchFieldImpl {
+func (cfg *Configuration) GetMatch(id string) MatchFieldImpl {
 	for k := range cfg.Matchs {
 		m := &cfg.Matchs[k]
-		if m.Id == id {
+		if strings.EqualFold(m.Id, id) {
 			return m
 		}
 	}
@@ -119,7 +119,7 @@ type SetDefault interface {
 }
 
 type MatchImpl interface {
-	GetMatch(id int) MatchFieldImpl
+	GetMatch(id string) MatchFieldImpl
 }
 
 type MatchFieldImpl interface {
