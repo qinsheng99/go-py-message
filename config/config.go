@@ -12,12 +12,12 @@ var reIpPort = regexp.MustCompile(`^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}:[1
 
 type Configuration struct {
 	MaxRetry int     `json:"max_retry"         required:"true"`
-	Match    []Match `json:"match"             required:"true"`
+	Matchs   []match `json:"matchs"             required:"true"`
 	Endpoint string  `json:"endpoint"          required:"true"`
 	MQ       MQ      `json:"mq"                required:"true"`
 }
 
-type Match struct {
+type match struct {
 	Id         int    `json:"match_id" required:"true"`
 	Type       string `json:"match_type" required:"true"`
 	AnswerPath string `json:"answer_path"`
@@ -25,25 +25,25 @@ type Match struct {
 	Cls        int    `json:"cls"`
 }
 
-func (m *Match) GetAnswerPath() string {
+func (m *match) GetAnswerPath() string {
 	return m.AnswerPath
 }
 
-func (m *Match) GetType() string {
+func (m *match) GetType() string {
 	return m.Type
 }
 
-func (m *Match) GetPos() int {
+func (m *match) GetPos() int {
 	return m.Pos
 }
 
-func (m *Match) GetCls() int {
+func (m *match) GetCls() int {
 	return m.Cls
 }
 
-func (cfg *Configuration) GetMatch(id int) *Match {
-	for k := range cfg.Match {
-		m := &cfg.Match[k]
+func (cfg *Configuration) GetMatch(id int) MatchFieldImpl {
+	for k := range cfg.Matchs {
+		m := &cfg.Matchs[k]
 		if m.Id == id {
 			return m
 		}
@@ -119,5 +119,12 @@ type SetDefault interface {
 }
 
 type MatchImpl interface {
-	GetMatch(id int) *Match
+	GetMatch(id int) MatchFieldImpl
+}
+
+type MatchFieldImpl interface {
+	GetAnswerPath() string
+	GetType() string
+	GetPos() int
+	GetCls() int
 }

@@ -65,7 +65,7 @@ func (h *handler) Evaluate(eval *message.MatchMessage, match *message.MatchField
 	})
 }
 
-func (h *handler) GetMatch(id int) *config.Match {
+func (h *handler) GetMatch(id int) message.MatchFieldImpl {
 	return h.match.GetMatch(id)
 }
 

@@ -1,9 +1,5 @@
 package message
 
-import (
-	"github.com/qinsheng99/go-py-message/config"
-)
-
 // GameFields Path 用户上传的result.txt
 // Cls 比赛的类别数
 // Pos 类别索引标签的起始位
@@ -43,7 +39,7 @@ type metrics struct {
 type MatchImpl interface {
 	Calculate(*MatchMessage, *MatchFields) error
 	Evaluate(*MatchMessage, *MatchFields) error
-	GetMatch(id int) *config.Match
+	GetMatch(id int) MatchFieldImpl
 }
 
 type MatchFieldImpl interface {
