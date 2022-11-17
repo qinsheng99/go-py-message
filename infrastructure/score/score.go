@@ -50,7 +50,7 @@ func (s *calculateImpl) Calculate(col *message.MatchFields) (data []byte, err er
 	}
 	path := filepath.Join(os.Getenv("UPLOAD"), fmt.Sprintf("%d", time.Now().UnixMicro()))
 	defer os.RemoveAll(path)
-	args := []string{s.calculate, "--user_result", col.Path, "--unzip_path", path}
+	args := []string{s.calculate, "--user_result", col.Path, "--unzip_path", path, "--fid_weights_file", col.FidWeightsPath, "--real_result", col.RealPath}
 	data, err = exec.Command("python3", args...).Output()
 
 	if err != nil {

@@ -35,9 +35,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description="calculate fid",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # 添加参数
-    parser.add_argument('--fid_weights_file', type=str, default=FID_WEIGHTS_PATH,
+    parser.add_argument('--fid_weights_file', type=str, default='',
                         help='the pretrain file')
-    parser.add_argument('--real_result', type=str, default=REAL_OBS_PATH,
+    parser.add_argument('--real_result', type=str, default='',
                         help='the standard result')
     parser.add_argument('--user_result', type=str, default='',
                         help='the submit result from user')

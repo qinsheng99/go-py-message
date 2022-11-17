@@ -72,7 +72,7 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 		case Text, Image:
 			go evaluate(h, &body, m)
 		case Style:
-			go calculate(h, &body)
+			go calculate(h, &body, m)
 		}
 
 		return nil
@@ -87,8 +87,8 @@ func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 	}
 }
 
-func calculate(h MatchImpl, body *MatchMessage) {
-	var c = MatchFields{Path: body.Path}
+func calculate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
+	var c = MatchFields{Path: body.Path, FidWeightsPath: m.GetFidWeightsPath(), RealPath: m.GetRealPath()}
 	err := h.Calculate(body, &c)
 	if err != nil {
 		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)

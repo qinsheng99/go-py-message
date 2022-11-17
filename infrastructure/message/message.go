@@ -15,9 +15,11 @@ type MatchMessage struct {
 }
 
 type MatchFields struct {
-	Path       string `json:"path"`
-	AnswerPath string `json:"answer_path"`
-	Cls, Pos   int
+	Path           string `json:"path"`
+	AnswerPath     string `json:"answer_path"`
+	FidWeightsPath string `json:"fid_weights_path"`
+	RealPath       string `json:"real_path"`
+	Cls, Pos       int
 }
 
 type ScoreRes struct {
@@ -47,4 +49,6 @@ type MatchFieldImpl interface {
 	GetType() string
 	GetPos() int
 	GetCls() int
+	GetFidWeightsPath() string
+	GetRealPath() string
 }

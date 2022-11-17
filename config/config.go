@@ -18,15 +18,25 @@ type Configuration struct {
 }
 
 type match struct {
-	Id         string `json:"competition_id" required:"true"`
-	Type       string `json:"competition_type" required:"true"`
-	AnswerPath string `json:"answer_path"`
-	Pos        int    `json:"pos"`
-	Cls        int    `json:"cls"`
+	Id             string `json:"competition_id" required:"true"`
+	Type           string `json:"competition_type" required:"true"`
+	AnswerPath     string `json:"answer_path"`
+	FidWeightsPath string `json:"fid_weights_path"`
+	RealPath       string `json:"real_path"`
+	Pos            int    `json:"pos"`
+	Cls            int    `json:"cls"`
 }
 
 func (m *match) GetAnswerPath() string {
 	return m.AnswerPath
+}
+
+func (m *match) GetFidWeightsPath() string {
+	return m.FidWeightsPath
+}
+
+func (m *match) GetRealPath() string {
+	return m.RealPath
 }
 
 func (m *match) GetType() string {
@@ -127,4 +137,6 @@ type MatchFieldImpl interface {
 	GetType() string
 	GetPos() int
 	GetCls() int
+	GetFidWeightsPath() string
+	GetRealPath() string
 }
