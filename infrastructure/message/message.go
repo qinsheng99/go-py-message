@@ -25,7 +25,7 @@ type MatchFields struct {
 type ScoreRes struct {
 	Status  int     `json:"status"`
 	Msg     string  `json:"msg"`
-	Data    float32 `json:"data,om64itempty"`
+	Data    float32 `json:"data"`
 	Metrics metrics `json:"metrics,omitempty"`
 }
 type metrics struct {
