@@ -49,13 +49,14 @@ func (s *calculateImpl) Calculate(col *message.MatchFields) (data []byte, err er
 		return nil, fmt.Errorf("path is empty")
 	}
 	path := filepath.Join(os.Getenv("UPLOAD"), fmt.Sprintf("%d", time.Now().UnixMicro()))
-	defer os.RemoveAll(path)
 	args := []string{s.calculate, "--user_result", col.Path, "--unzip_path", path, "--fid_weights_file", col.FidWeightsPath, "--real_result", col.RealPath}
 	data, err = exec.Command("python3", args...).Output()
 
 	if err != nil {
+		os.RemoveAll(path)
 		return
 	}
 	data = bytes.ReplaceAll(bytes.TrimSpace(data), []byte(`'`), []byte(`"`))
+	os.RemoveAll(path)
 	return
 }
