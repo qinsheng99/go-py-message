@@ -51,7 +51,7 @@ func main() {
 	if err := o.Validate(); err != nil {
 		logrus.Fatalf("Invalid options, err:%s", err.Error())
 	}
-
+	logrus.SetLevel(logrus.DebugLevel)
 	if o.enableDebug {
 		logrus.SetLevel(logrus.DebugLevel)
 		logrus.Debug("debug enabled.")
