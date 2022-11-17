@@ -25,8 +25,8 @@ import torchvision
 
 # http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz
 # FID_WEIGHTS_URL = 'https://github.com/mseitzer/pytorch-fid/releases/download/fid_weights/pt_inception-2015-12-05-6726825d.pth'  # noqa: E501
-FID_WEIGHTS_PATH = "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/pt_inception-2015-12-05-6726825d.pth"
-REAL_OBS_PATH = 'xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/target_style_vangogh'
+FID_WEIGHTS_PATH = os.getenv("FID_WEIGHTS_PATH")
+REAL_OBS_PATH = os.getenv("REAL_OBS_PATH")
 REAL_FILE_NAME = 'target_style_vangogh'
 
 
@@ -35,13 +35,13 @@ def parse_args():
     parser = argparse.ArgumentParser(description="calculate fid",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # 添加参数
-    parser.add_argument('--fid_weights_file', type=str, default="xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/pt_inception-2015-12-05-6726825d.pth",
+    parser.add_argument('--fid_weights_file', type=str, default=FID_WEIGHTS_PATH,
                         help='the pretrain file')
-    parser.add_argument('--real_result', type=str, default='xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/target_style_vangogh',
+    parser.add_argument('--real_result', type=str, default=REAL_OBS_PATH,
                         help='the standard result')
-    parser.add_argument('--user_result', type=str, default='xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result',
+    parser.add_argument('--user_result', type=str, default='',
                         help='the submit result from user')
-    parser.add_argument('--unzip_path', type=str, default='C:\\datasets\\fid_test\\',
+    parser.add_argument('--unzip_path', type=str, default='',
                         help='the local unzip path')
 
     return parser.parse_args()

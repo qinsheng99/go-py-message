@@ -71,22 +71,22 @@ func TestMqGame(t *testing.T) {
 	msg3 := mq.Message{Body: bys3}
 	msg4 := mq.Message{Body: bys4}
 
-	err = kafka.Publish("game", &msg1)
+	err = kafka.Publish("xihe_submission_new", &msg1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = kafka.Publish("game", &msg3)
+	err = kafka.Publish("xihe_submission_new", &msg3)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = kafka.Publish("game", &msg2)
+	err = kafka.Publish("xihe_submission_new", &msg2)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = kafka.Publish("game", &msg4)
+	err = kafka.Publish("xihe_submission_new", &msg4)
 	if err != nil {
 		t.Fatal(err)
 	}
