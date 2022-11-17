@@ -9,7 +9,7 @@ package message
 // 文本分类 text  图像分类 image  风格迁移style
 type MatchMessage struct {
 	CompetitionId string `json:"competition_id"`
-	UserId        string `json:"id"`
+	UserId        string `json:"submission_id"`
 	Phase         string `json:"phase"`
 	Path          string `json:"path,omitempty"`
 }
