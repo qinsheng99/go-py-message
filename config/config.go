@@ -89,7 +89,7 @@ type MQ struct {
 }
 
 type Topics struct {
-	Match string `json:"match"       required:"true"`
+	Match string `json:"submission"       required:"true"`
 }
 
 func LoadConfig(path string, cfg interface{}) error {
