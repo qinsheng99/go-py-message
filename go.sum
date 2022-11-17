@@ -229,6 +229,8 @@ github.com/opensourceways/community-robot-lib v0.0.0-20221016001453-0602b5e39d95
 github.com/opensourceways/go-gitee v0.0.0-20220714075315-cb246f1dfb96/go.mod h1:yvVsEMhp7frMblzN1sco4C7cRlnlpqkkn3O2JQNdRu0=
 github.com/opensourceways/xihe-grpc-protocol v0.0.0-20221117023542-9a5d8c2ffb68 h1:S64MjeN6XZhKqu/wO6Z88YqiUMXP+0rysajZocYbzUI=
 github.com/opensourceways/xihe-grpc-protocol v0.0.0-20221117023542-9a5d8c2ffb68/go.mod h1:oDg3IkriEaMnfzSah7fscVp8nq7+baTNPelKPgHSrqY=
+github.com/opensourceways/xihe-grpc-protocol v0.0.0-20221117063933-0f2786747d81 h1:6jVM7QIhEzxzmbjcB5LCC/OoOOwxBq79iUY57oZdaS0=
+github.com/opensourceways/xihe-grpc-protocol v0.0.0-20221117063933-0f2786747d81/go.mod h1:oDg3IkriEaMnfzSah7fscVp8nq7+baTNPelKPgHSrqY=
 github.com/pierrec/lz4 v2.6.1+incompatible h1:9UY3+iC23yxF0UfGaYrGplQ+79Rg+h/q9FV9ix19jjM=
 github.com/pierrec/lz4 v2.6.1+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

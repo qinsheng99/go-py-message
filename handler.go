@@ -73,11 +73,11 @@ func (h *handler) GetMatch(id string) message.MatchFieldImpl {
 }
 
 func (h *handler) handlerCompetition(m handlerMessage) {
-	err := h.cli.SetSubmissionInfo(&competition.SubmissionIndex{
-		Id:            m.UserId,
-		Phase:         m.Phase,
-		CompetitionId: m.CompetitionId,
+	err := h.cli.SetSubmissionInfo(&competition.CompetitionIndex{
+		Id:    m.CompetitionId,
+		Phase: m.Phase,
 	}, &competition.SubmissionInfo{
+		Id:     m.UserId,
 		Status: m.status,
 		Score:  m.score,
 	})

@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/opensourceways/community-robot-lib v0.0.0-20221016001453-0602b5e39d95
-	github.com/opensourceways/xihe-grpc-protocol v0.0.0-20221117023542-9a5d8c2ffb68
 	github.com/sirupsen/logrus v1.9.0
 )
 
@@ -26,6 +25,7 @@ require (
 	github.com/jcmturner/gokrb5/v8 v8.4.2 // indirect
 	github.com/jcmturner/rpc/v2 v2.0.3 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
+	github.com/opensourceways/xihe-grpc-protocol v0.0.0-20221117063933-0f2786747d81 // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
