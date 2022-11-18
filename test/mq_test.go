@@ -23,29 +23,29 @@ func TestMqGame(t *testing.T) {
 	data1 := message.MatchMessage{
 		CompetitionId: "1",
 		UserId:        "1",
-		Path:          "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
-		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
+		Path:          "昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
+		Phase:         "final",
 	}
 
 	data2 := message.MatchMessage{
 		CompetitionId: "2",
 		UserId:        "2",
-		Path:          "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
-		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
+		Path:          "昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
+		Phase:         "final",
 	}
 
 	data3 := message.MatchMessage{
 		CompetitionId: "3",
 		UserId:        "3",
-		Path:          "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
-		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
+		Path:          "昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
+		Phase:         "final",
 	}
 
 	data4 := message.MatchMessage{
 		CompetitionId: "4",
 		UserId:        "4",
-		Path:          "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
-		//TruePath: "xihe-obj/competitions/昇思AI挑战赛-多类别图像分类/result/label.txt",
+		Path:          "昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
+		Phase:         "final",
 	}
 
 	bys1, err := json.Marshal(data1)
