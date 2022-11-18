@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/opensourceways/community-robot-lib/kafka"
 	"github.com/opensourceways/community-robot-lib/mq"
@@ -14,6 +15,9 @@ const (
 	Image = "image"
 	Text  = "text"
 	Style = "style"
+
+	CompetitionPhaseFinal       = "final"
+	CompetitionPhasePreliminary = "preliminary"
 )
 
 func Subscribe(ctx context.Context, handler interface{}, log *logrus.Entry) error {
@@ -80,7 +84,13 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 }
 
 func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
-	var c = MatchFields{Path: body.Path, Cls: m.GetCls(), Pos: m.GetPos(), AnswerPath: m.GetAnswerPath()}
+	var c = MatchFields{Path: m.GetPrefix() + "/" + strings.TrimPrefix(body.Path, "/"), Cls: m.GetCls(), Pos: m.GetPos()}
+	switch body.Phase {
+	case CompetitionPhaseFinal:
+		c.AnswerPath = m.GetAnswerFinalPath()
+	case CompetitionPhasePreliminary:
+		c.AnswerPath = m.GetAnswerPreliminaryPath()
+	}
 	err := h.Evaluate(body, &c)
 	if err != nil {
 		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)
@@ -88,7 +98,15 @@ func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 }
 
 func calculate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
-	var c = MatchFields{Path: body.Path, FidWeightsPath: m.GetFidWeightsPath(), RealPath: m.GetRealPath()}
+	var c = MatchFields{Path: m.GetPrefix() + "/" + strings.TrimPrefix(body.Path, "/")}
+	switch body.Phase {
+	case CompetitionPhaseFinal:
+		c.FidWeightsPath = m.GetFidWeightsFinalPath()
+		c.RealPath = m.GetRealFinalPath()
+	case CompetitionPhasePreliminary:
+		c.FidWeightsPath = m.GetFidWeightsPreliminaryPath()
+		c.RealPath = m.GetRealPreliminaryPath()
+	}
 	err := h.Calculate(body, &c)
 	if err != nil {
 		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)

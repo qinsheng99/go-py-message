@@ -45,10 +45,14 @@ type MatchImpl interface {
 }
 
 type MatchFieldImpl interface {
-	GetAnswerPath() string
+	GetAnswerFinalPath() string
+	GetAnswerPreliminaryPath() string
 	GetType() string
 	GetPos() int
 	GetCls() int
-	GetFidWeightsPath() string
-	GetRealPath() string
+	GetFidWeightsFinalPath() string
+	GetFidWeightsPreliminaryPath() string
+	GetRealFinalPath() string
+	GetRealPreliminaryPath() string
+	GetPrefix() string
 }

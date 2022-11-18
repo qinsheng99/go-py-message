@@ -18,25 +18,45 @@ type Configuration struct {
 }
 
 type match struct {
-	Id             string `json:"competition_id" required:"true"`
-	Type           string `json:"competition_type" required:"true"`
-	AnswerPath     string `json:"answer_path"`
-	FidWeightsPath string `json:"fid_weights_path"`
-	RealPath       string `json:"real_path"`
-	Pos            int    `json:"pos"`
-	Cls            int    `json:"cls"`
+	Id                        string `json:"competition_id" required:"true"`
+	Type                      string `json:"competition_type" required:"true"`
+	AnswerFinalPath           string `json:"answer_final_path"`
+	AnswerPreliminaryPath     string `json:"answer_preliminary_path"`
+	FidWeightsFinalPath       string `json:"fid_weights_final_path"`
+	FidWeightsPreliminaryPath string `json:"fid_weights_preliminary_path"`
+	RealFinalPath             string `json:"real_final_path"`
+	RealPreliminaryPath       string `json:"real_preliminary_path"`
+	Pos                       int    `json:"pos"`
+	Cls                       int    `json:"cls"`
+	Prefix                    string `json:"prefix" required:"true"`
 }
 
-func (m *match) GetAnswerPath() string {
-	return m.AnswerPath
+func (m *match) GetAnswerFinalPath() string {
+	return m.AnswerFinalPath
 }
 
-func (m *match) GetFidWeightsPath() string {
-	return m.FidWeightsPath
+func (m *match) GetAnswerPreliminaryPath() string {
+	return m.AnswerPreliminaryPath
 }
 
-func (m *match) GetRealPath() string {
-	return m.RealPath
+func (m *match) GetPrefix() string {
+	return m.Prefix
+}
+
+func (m *match) GetFidWeightsFinalPath() string {
+	return m.FidWeightsFinalPath
+}
+
+func (m *match) GetFidWeightsPreliminaryPath() string {
+	return m.FidWeightsPreliminaryPath
+}
+
+func (m *match) GetRealFinalPath() string {
+	return m.RealFinalPath
+}
+
+func (m *match) GetRealPreliminaryPath() string {
+	return m.RealPreliminaryPath
 }
 
 func (m *match) GetType() string {
@@ -133,10 +153,14 @@ type MatchImpl interface {
 }
 
 type MatchFieldImpl interface {
-	GetAnswerPath() string
+	GetAnswerFinalPath() string
+	GetAnswerPreliminaryPath() string
 	GetType() string
 	GetPos() int
 	GetCls() int
-	GetFidWeightsPath() string
-	GetRealPath() string
+	GetFidWeightsFinalPath() string
+	GetFidWeightsPreliminaryPath() string
+	GetRealFinalPath() string
+	GetRealPreliminaryPath() string
+	GetPrefix() string
 }
