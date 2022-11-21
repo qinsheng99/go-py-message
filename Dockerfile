@@ -14,7 +14,7 @@ FROM openeuler/openeuler:21.03
 
 RUN yum update && yum install -y python3 && yum install -y python3-pip
 
-RUN mkdir -p /opt/app/go-py-message/py
+RUN mkdir -p /opt/app/go-py-message/py/data
 
 COPY ./py /opt/app/go-py-message/py
 
@@ -22,7 +22,7 @@ RUN chmod 755 -R /opt/app/go-py-message/py
 
 ENV EVALUATE /opt/app/go-py-message/py/evaluate.py
 ENV CALCULATE /opt/app/go-py-message/py/calculate_fid.py
-ENV UPLOAD /opt/app/go-py-message/py/
+ENV UPLOAD /opt/app/go-py-message/py/data/
 
 RUN pip install -r /opt/app/go-py-message/py/requirements.txt
 
