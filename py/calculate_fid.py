@@ -25,8 +25,8 @@ import torchvision
 
 # http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz
 # FID_WEIGHTS_URL = 'https://github.com/mseitzer/pytorch-fid/releases/download/fid_weights/pt_inception-2015-12-05-6726825d.pth'  # noqa: E501
-FID_WEIGHTS_PATH = os.getenv("FID_WEIGHTS_PATH")
-REAL_OBS_PATH = os.getenv("REAL_OBS_PATH")
+FID_WEIGHTS_PATH = "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/pt_inception-2015-12-05-6726825d.pth"
+REAL_OBS_PATH = 'xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/target_style_vangogh'
 REAL_FILE_NAME = 'target_style_vangogh'
 
 
@@ -35,9 +35,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description="calculate fid",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # 添加参数
-    parser.add_argument('--fid_weights_file', type=str, default='',
+    parser.add_argument('--fid_weights_file', type=str, default='xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/pt_inception-2015-12-05-6726825d.pth',
                         help='the pretrain file')
-    parser.add_argument('--real_result', type=str, default='',
+    parser.add_argument('--real_result', type=str, default='xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/result/target_style_vangogh',
                         help='the standard result')
     parser.add_argument('--user_result', type=str, default='',
                         help='the submit result from user')
@@ -587,17 +587,16 @@ def un_zip_real(file_name, unzip_path):
 def un_zip(file_name, unzip_path, result):
     """unzip zip file"""
     zip_file = zipfile.ZipFile(os.path.join(unzip_path, file_name+".zip"))
-    temp_name = zip_file.namelist()[0][:-1]
-    # print(temp_name)
     file_count = len(zip_file.namelist())
     if file_count != 1001:
         result["status"] = -1
         result["msg"] = "读取失败，请确保图像数量为1000张!"
         return os.path.join(unzip_path, file_name)
+    temp_name = os.path.split(zip_file.namelist()[10])[0]
     for names in zip_file.namelist():
         zip_file.extract(names, unzip_path)
     zip_file.close()
-    return os.path.join(unzip_path, file_name)
+    return os.path.join(unzip_path, temp_name)
 
 
 def load_paths(local_path, team_file_name, team_obs_path, result):
@@ -623,7 +622,7 @@ def calcu_fid(local_path, team_obs_path):
     }
 
     path_list = re.split('/', team_obs_path)
-    team_file_name = path_list[-1]
+    team_file_name = path_list[-1].strip('.zip').strip()
 
     real_path, fake_path = load_paths(local_path, team_file_name, team_obs_path, result)
 
@@ -653,7 +652,7 @@ if __name__ == '__main__':
 
     local_path = args_opt.unzip_path
     team_obs_path = args_opt.user_result
-    # team_obs_path = 'xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result'  # 存有1000张图片的zip文件
+
 
     result = calcu_fid(local_path, team_obs_path)
     if result['status'] != -1:
