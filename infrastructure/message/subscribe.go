@@ -91,6 +91,8 @@ func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 	case CompetitionPhasePreliminary:
 		c.AnswerPath = m.GetAnswerPreliminaryPath()
 	}
+	logrus.Info(body)
+	logrus.Info(c)
 	err := h.Evaluate(body, &c)
 	if err != nil {
 		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)
@@ -107,6 +109,8 @@ func calculate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 		c.FidWeightsPath = m.GetFidWeightsPreliminaryPath()
 		c.RealPath = m.GetRealPreliminaryPath()
 	}
+	logrus.Info(body)
+	logrus.Info(c)
 	err := h.Calculate(body, &c)
 	if err != nil {
 		logrus.Errorf("evaluate failed, competition id:%s,user:%v", body.CompetitionId, body.UserId)
