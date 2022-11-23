@@ -35,11 +35,13 @@ func (h *handler) Calculate(cal *message.MatchMessage, match *message.MatchField
 		err := h.calculate.Calculate(match, &res)
 		if err != nil {
 			h.log.Errorf("calculate script failed,err: %v", err)
-			m.status = err.Error()
+			m.status = "failed"
 		} else {
 			if res.Status != 200 {
-				m.status = res.Msg
+				h.log.Errorf("calculate script status failed,err: %v", res.Msg)
+				m.status = "failed"
 			} else {
+				m.status = "success"
 				m.score = res.Data
 			}
 		}
@@ -55,11 +57,13 @@ func (h *handler) Evaluate(eval *message.MatchMessage, match *message.MatchField
 		err := h.evaluate.Evaluate(match, &res)
 		if err != nil {
 			h.log.Errorf("evaluate script failed,err: %v", err)
-			m.status = err.Error()
+			m.status = "failed"
 		} else {
 			if res.Status != 200 {
-				m.status = res.Msg
+				h.log.Errorf("evaluate script status failed,err: %v", res.Msg)
+				m.status = "failed"
 			} else {
+				m.status = "success"
 				m.score = res.Metrics.Acc
 			}
 		}
