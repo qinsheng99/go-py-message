@@ -16,7 +16,7 @@ class OBSHandler:
         self.secret_key = obs_sk
         self.bucket_name = obs_bucketname
         self.endpoint = obs_endpoint
-        self.server = "https://" + obs_endpoint
+        self.server = obs_endpoint
         self.obsClient = self.init_obs()
         self.maxkeys = 5000  # 查询的对象最大个数
 
