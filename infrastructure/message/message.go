@@ -47,7 +47,6 @@ type MatchImpl interface {
 type MatchFieldImpl interface {
 	GetAnswerFinalPath() string
 	GetAnswerPreliminaryPath() string
-	GetType() string
 	GetPos() int
 	GetCls() int
 	GetFidWeightsFinalPath() string
@@ -55,4 +54,5 @@ type MatchFieldImpl interface {
 	GetRealFinalPath() string
 	GetRealPreliminaryPath() string
 	GetPrefix() string
+	GetCompetitionId() string
 }

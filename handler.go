@@ -86,9 +86,9 @@ func (h *handler) handlerCompetition(m handlerMessage) {
 		Score:  m.score,
 	})
 	if err != nil {
-		h.log.Errorf("call competition rpc failed,err :%v ,data:%v", err, m)
+		h.log.Errorf("call competition rpc failed,err:%v ,data:%v", err, m)
 	} else {
-		h.log.Debugf("call competition rpc, id:%s,user:%v,stage:%v,res:(%s/%v)", m.CompetitionId, m.UserId, m.Phase, m.status, m.score)
+		h.log.Debugf("call competition rpc, competition_id:%s,user:%v,phase:%v,res:(%s/%v)", m.CompetitionId, m.UserId, m.Phase, m.status, m.score)
 	}
 }
 

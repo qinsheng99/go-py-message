@@ -19,7 +19,6 @@ type Configuration struct {
 
 type match struct {
 	Id                        string `json:"competition_id" required:"true"`
-	Type                      string `json:"competition_type" required:"true"`
 	AnswerFinalPath           string `json:"answer_final_path"`
 	AnswerPreliminaryPath     string `json:"answer_preliminary_path"`
 	FidWeightsFinalPath       string `json:"fid_weights_final_path"`
@@ -59,16 +58,16 @@ func (m *match) GetRealPreliminaryPath() string {
 	return m.RealPreliminaryPath
 }
 
-func (m *match) GetType() string {
-	return m.Type
-}
-
 func (m *match) GetPos() int {
 	return m.Pos
 }
 
 func (m *match) GetCls() int {
 	return m.Cls
+}
+
+func (m *match) GetCompetitionId() string {
+	return m.Id
 }
 
 func (cfg *Configuration) GetMatch(id string) MatchFieldImpl {
@@ -155,7 +154,6 @@ type MatchImpl interface {
 type MatchFieldImpl interface {
 	GetAnswerFinalPath() string
 	GetAnswerPreliminaryPath() string
-	GetType() string
 	GetPos() int
 	GetCls() int
 	GetFidWeightsFinalPath() string
@@ -163,4 +161,5 @@ type MatchFieldImpl interface {
 	GetRealFinalPath() string
 	GetRealPreliminaryPath() string
 	GetPrefix() string
+	GetCompetitionId() string
 }

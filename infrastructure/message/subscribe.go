@@ -12,9 +12,12 @@ import (
 )
 
 const (
-	Image = "image"
-	Text  = "text"
-	Style = "style"
+	StyleCompetition   = "1"
+	TextCompetition    = "2"
+	ImageCompetition   = "3"
+	FoodClassification = "food_classification"
+	TextClassification = "text_classification"
+	XianTravel         = "xian_travel"
 
 	CompetitionPhaseFinal       = "final"
 	CompetitionPhasePreliminary = "preliminary"
@@ -72,10 +75,10 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 			return fmt.Errorf("unknown competition id:%s", body.CompetitionId)
 		}
 
-		switch m.GetType() {
-		case Text, Image:
+		switch m.GetCompetitionId() {
+		case TextCompetition, ImageCompetition, FoodClassification, TextClassification, XianTravel:
 			go evaluate(h, &body, m)
-		case Style:
+		case StyleCompetition:
 			go calculate(h, &body, m)
 		}
 
@@ -91,7 +94,6 @@ func evaluate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 	case CompetitionPhasePreliminary:
 		c.AnswerPath = m.GetAnswerPreliminaryPath()
 	}
-	logrus.Info(body)
 	logrus.Info(c)
 	err := h.Evaluate(body, &c)
 	if err != nil {
@@ -109,7 +111,6 @@ func calculate(h MatchImpl, body *MatchMessage, m MatchFieldImpl) {
 		c.FidWeightsPath = m.GetFidWeightsPreliminaryPath()
 		c.RealPath = m.GetRealPreliminaryPath()
 	}
-	logrus.Info(body)
 	logrus.Info(c)
 	err := h.Calculate(body, &c)
 	if err != nil {
