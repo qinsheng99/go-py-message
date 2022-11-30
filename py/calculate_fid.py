@@ -588,7 +588,7 @@ def un_zip(file_name, unzip_path, result):
     """unzip zip file"""
     zip_file = zipfile.ZipFile(os.path.join(unzip_path, file_name+".zip"))
     file_count = len(zip_file.namelist())
-    if file_count != 1001:
+    if file_count != 1001 and file_count != 1000:
         result["status"] = -1
         result["msg"] = "读取失败，请确保图像数量为1000张!"
         return os.path.join(unzip_path, file_name)
