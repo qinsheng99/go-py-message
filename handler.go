@@ -5,10 +5,11 @@ import (
 
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/client"
 	"github.com/opensourceways/xihe-grpc-protocol/grpc/competition"
+	"github.com/sirupsen/logrus"
+
 	"github.com/qinsheng99/go-py-message/app"
 	"github.com/qinsheng99/go-py-message/config"
 	"github.com/qinsheng99/go-py-message/infrastructure/message"
-	"github.com/sirupsen/logrus"
 )
 
 type handler struct {
@@ -46,6 +47,7 @@ func (h *handler) Calculate(cal *message.MatchMessage, match *message.MatchField
 			}
 		}
 		h.handlerCompetition(m)
+
 		return err
 	})
 }
@@ -68,6 +70,7 @@ func (h *handler) Evaluate(eval *message.MatchMessage, match *message.MatchField
 			}
 		}
 		h.handlerCompetition(m)
+
 		return err
 	})
 }
@@ -77,13 +80,12 @@ func (h *handler) GetMatch(id string) message.MatchFieldImpl {
 }
 
 func (h *handler) handlerCompetition(m handlerMessage) {
-	err := h.cli.SetSubmissionInfo(&competition.CompetitionIndex{
-		Id:    m.CompetitionId,
-		Phase: m.Phase,
-	}, &competition.SubmissionInfo{
-		Id:     m.UserId,
-		Status: m.status,
-		Score:  m.score,
+	err := h.cli.SetSubmissionInfo(m.CompetitionId, &competition.SubmissionInfo{
+		Id:       m.UserId,
+		Status:   m.status,
+		Score:    m.score,
+		Phase:    m.Phase,
+		PlayerId: m.PlayerId,
 	})
 	if err != nil {
 		h.log.Errorf("call competition rpc failed,err:%v ,data:%v", err, m)

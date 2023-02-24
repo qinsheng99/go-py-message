@@ -1,17 +1,11 @@
 package message
 
-// GameFields Path 用户上传的result.txt
-// Cls 比赛的类别数
-// Pos 类别索引标签的起始位
-// UserResult  存有1000张图片的zip文件
-
-// MatchMessage
-// 文本分类 text  图像分类 image  风格迁移style
 type MatchMessage struct {
-	CompetitionId string `json:"competition_id"`
-	UserId        string `json:"submission_id"`
+	CompetitionId string `json:"cid"`
+	UserId        string `json:"id"`
 	Phase         string `json:"phase"`
-	Path          string `json:"path,omitempty"`
+	Path          string `json:"obs_path"`
+	PlayerId      string `json:"pid"`
 }
 
 type MatchFields struct {

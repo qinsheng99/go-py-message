@@ -6,6 +6,7 @@ import (
 
 	"github.com/opensourceways/community-robot-lib/kafka"
 	"github.com/opensourceways/community-robot-lib/mq"
+
 	"github.com/qinsheng99/go-py-message/infrastructure/message"
 )
 
@@ -25,6 +26,7 @@ func TestMqGame(t *testing.T) {
 		UserId:        "1",
 		Path:          "昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
 		Phase:         "final",
+		PlayerId:      "1",
 	}
 
 	data2 := message.MatchMessage{
@@ -32,6 +34,7 @@ func TestMqGame(t *testing.T) {
 		UserId:        "2",
 		Path:          "昇思AI挑战赛-多类别图像分类/submit_result/s9qfqri3zpc8j2x7_1/result_example_5120-2022-8-8-15-3-16.txt",
 		Phase:         "final",
+		PlayerId:      "2",
 	}
 
 	data3 := message.MatchMessage{
@@ -39,6 +42,7 @@ func TestMqGame(t *testing.T) {
 		UserId:        "3",
 		Path:          "昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
 		Phase:         "final",
+		PlayerId:      "3",
 	}
 
 	data4 := message.MatchMessage{
@@ -46,6 +50,7 @@ func TestMqGame(t *testing.T) {
 		UserId:        "4",
 		Path:          "昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
 		Phase:         "final",
+		PlayerId:      "4",
 	}
 
 	bys1, err := json.Marshal(data1)

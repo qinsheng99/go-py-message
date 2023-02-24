@@ -41,6 +41,7 @@ func (s *evaluateImpl) Evaluate(col *message.MatchFields) (data []byte, err erro
 		return
 	}
 	data = bytes.ReplaceAll(bytes.TrimSpace(data), []byte(`'`), []byte(`"`))
+
 	return
 }
 
@@ -58,5 +59,6 @@ func (s *calculateImpl) Calculate(col *message.MatchFields) (data []byte, err er
 	}
 	data = bytes.ReplaceAll(bytes.TrimSpace(data), []byte(`'`), []byte(`"`))
 	os.RemoveAll(path)
+
 	return
 }
