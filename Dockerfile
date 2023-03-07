@@ -10,9 +10,9 @@ RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN cd /go/src/openeuler/go-py-message && go mod tidy && CGO_ENABLED=1 go build -v -o ./go-py-message .
 
 # copy binary config and utils
-FROM openeuler/openeuler:21.03
+FROM openeuler/openeuler:22.03
 
-RUN yum update && yum install -y python3 && yum install -y python3-pip
+RUN yum update -y && yum install -y python3 && yum install -y python3-pip
 
 RUN mkdir -p /opt/app/go-py-message/py/data
 
