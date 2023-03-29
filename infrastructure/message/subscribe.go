@@ -12,12 +12,11 @@ import (
 )
 
 const (
-	StyleCompetition   = "1"
-	TextCompetition    = "2"
-	ImageCompetition   = "3"
-	FoodClassification = "food_classification"
-	TextClassification = "text_classification"
-	XianTravel         = "xian_travel"
+	StyleCompetition = "1"
+	TextCompetition  = "2"
+	ImageCompetition = "3"
+	LearnText        = "learn23-text"
+	LeanImg          = "learn23-img"
 
 	CompetitionPhaseFinal       = "final"
 	CompetitionPhasePreliminary = "preliminary"
@@ -76,7 +75,7 @@ func registerHandlerForGame(handler interface{}) (mq.Subscriber, error) {
 		}
 
 		switch m.GetCompetitionId() {
-		case TextCompetition, ImageCompetition, FoodClassification, TextClassification, XianTravel:
+		case TextCompetition, ImageCompetition, LearnText, LeanImg:
 			go evaluate(h, &body, m)
 		case StyleCompetition:
 			go calculate(h, &body, m)
